@@ -28,8 +28,8 @@ class TheHarvester
 			return false;
 		}
 
-		//exec( 'theharvester -b '.self::SE_ENGINE.' -l '.self::SE_LIMIT.' -d '.$this->domain, $this->result );
-		$this->result = file( '/tmp/dns56eee2a6d9edc.txt', FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES );
+		exec( 'theharvester -b '.self::SE_ENGINE.' -l '.self::SE_LIMIT.' -d '.$this->domain, $this->result );
+		//$this->result = file( '/tmp/dns56eee2a6d9edc.txt', FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES );
 		//var_dump( $this->result );
 
 		$this->parseTable();

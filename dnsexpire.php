@@ -18,10 +18,11 @@ if( $_SERVER['argc'] < 2 ) {
 define( 'DATE_ALERT', 60*60*24*30 ); // 30 days
 
 
-include( 'core.php' );
-include( 'host.php' );
-include( 'theharvester.php' );
-include( 'utils.php' );
+include( 'Core.php' );
+include( 'Host.php' );
+include( 'TheHarvester.php' );
+include( 'Utils.php' );
+
 
 $domain = $_SERVER['argv'][1];
 
@@ -72,9 +73,7 @@ foreach( $t_host as $h ) {
 
 foreach( $t_check as $h=>$d )
 {
-	list($null,$date) = explode( ':', $d );
-	$date = str_replace( '.', '-', $date );
-	$time = strtotime( trim($date) );
+	$time = Utils::_strtotime( $d );
 	$current = time();
 
 	if( $current > $time ) {

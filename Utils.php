@@ -70,6 +70,21 @@ class Utils
 
 		return false;
 	}
+
+
+	public static function _strtotime( $str )
+	{
+		if( strstr($str,':') ) {
+			list($null, $str) = explode(':', $str);
+		}
+		if( strstr($str,'T') ) {
+			list($str,$null) = explode('T', $str);
+		}
+		$str = str_replace( '.', '-', $str );
+		$time = strtotime( trim($str) );
+
+		return $time;
+	}
 }
 
 ?>
