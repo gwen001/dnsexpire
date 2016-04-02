@@ -24,6 +24,17 @@ class TheHarvester
 	//private $allowed_tags = array( '<theHarvester>', '<email>', '<host>', '<vhost>' );
 
 
+	public function __construct()
+	{
+		exec( 'whereis theharvster', $exec );
+		$tmp = explode( ' ', $exec[0] );
+
+		if( count($tmp) <= 1 ) {
+			throw new Exception( 'TheHarvester not found!' );
+		}
+	}
+
+
 	public function setDomain( $v ) {
 		$this->domain = trim( $v );
 		$tmp = explode( '.', $this->domain );

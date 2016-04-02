@@ -26,10 +26,19 @@ class DnsExpire
 
 
 	public function getDomain() {
-		return $this->domain;
+		if( $this->input_file ) {
+			return $this->input_file;
+		} else {
+			return $this->domain;
+		}
 	}
 	public function setDomain( $v ) {
-		$this->domain = trim( $v );
+		$v = trim( $v );
+		if( is_file($v) ) {
+			$this->input_file = $v;
+		} else {
+			$this->domain = $v;
+		}
 		return true;
 	}
 
@@ -48,17 +57,6 @@ class DnsExpire
 		$v = (int)$v;
 		if( $v > 0 ) {
 			$this->alert = (int)$v * 60*60*24;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
-	public function setInputFile( $v ) {
-		$v = trim( $v );
-		if( is_file($v) ) {
-			$this->input_file = $v;
 			return true;
 		} else {
 			return false;
@@ -118,9 +116,14 @@ class DnsExpire
 
 	private function findHost()
 	{
-		$th = new TheHarvester();
+		try {
+			$th = new TheHarvester();
+		} catch (Exception $e) {
+			echo $e->getMessage()."\n";
+			return array( array(), array($this->domain) );
+		}
+
 		$th->setDomain( $this->domain );
-		$th->setInputFile( $this->input_file );
 		$th->run();
 
 		return array( $th->rEmail(), $th->rHost() );
@@ -194,8 +197,8 @@ class DnsExpire
 					$whois = '';
 					$this->t_expire[$h] = array( 'date'=>'', 'host'=>'' );
 					exec('whois ' . $h, $whois);
-					usleep( 100000 );
 					//echo "WHOIS $h\n";
+					usleep( 100000 );
 					$k = Utils::_array_search( $whois, $this->t_expire_string );
 
 					if( $k !== false ) {

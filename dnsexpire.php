@@ -32,11 +32,6 @@ set_time_limit( 0 );
 				$i++;
 				break;
 
-			case '-f':
-				$dnsexpire->setInputFile( $_SERVER['argv'][$i + 1] );
-				$i++;
-				break;
-
 			case '-h':
 				Utils::help();
 				break;
