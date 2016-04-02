@@ -1,24 +1,33 @@
 <?php
 
+/**
+ * I don't believe in license
+ * You can do want you want with this program
+ * - gwen -
+ */
+
 class Host
 {
 	private $host = null;
+
 	private $ip = null;
+
 	private $parent = null;
+
 	private $t_alias = array();
+
 	private $is_alias = false;
 
 
-	public function setHost( $v ) {
-		$this->host = trim( $v );
-	}
 	public function getHost() {
 		return $this->host;
 	}
+	public function setHost( $v ) {
+		$this->host = trim( $v );
+	}
 
 
-	public function getIp()
-	{
+	public function getIp() {
 		return $this->ip;
 	}
 	public function setIp( $v ) {
@@ -26,35 +35,24 @@ class Host
 	}
 
 
-	public function setParent( $v )
-	{
+	public function setParent( $v ) {
 		$this->parent = $v->getHost();
 	}
-	public function getParent()
-	{
+	public function getParent() {
 		return $this->parent;
 	}
 
 
-	public function setAlias( $v )
-	{
-		$this->is_alias = (bool)$v;
-	}
-
-
-	public function getAlias()
-	{
+	public function getAlias() {
 		return $this->t_alias;
 	}
-
-	public function addAlias( $v )
-	{
+	public function setAlias( $v ) {
+		$this->is_alias = (bool)$v;
+	}
+	public function addAlias( $v ) {
 		$this->t_alias[] = $v->getHost();
 	}
-
-
-	public function hasAlias()
-	{
+	public function hasAlias() {
 		return count($this->t_alias);
 	}
 }

@@ -1,26 +1,58 @@
 <?php
 
+/**
+ * I don't believe in license
+ * You can do want you want with this program
+ * - gwen -
+ */
+
 class Utils
 {
 	const TMP_DIR = '/tmp/';
 	const T_SHELL_COLORS = array(
-		'black' => '30',
-		'blue' => '34',
-		'green' => '32',
-		'cyan' => '36',
-		'red' => '31',
-		'purple' => '35',
-		'brown' => '33',
-		'light_gray' => '37',
-		'dark_gray' => '30',
-		'light_blue' => '34',
-		'light_green' => '32',
-		'light_cyan' => '36',
-		'light_red' => '31',
-		'light_purple' => '35',
-		'yellow' => '33',
-		'white' => '37',
+		'nc' => '0',
+		'black' => '0;30',
+		'red' => '0;31',
+		'green' => '0;32',
+		'orange' => '0;33',
+		'blue' => '0;34',
+		'purple' => '0;35',
+		'cyan' => '0;36',
+		'light_grey' => '0;37',
+		'dark_grey' => '1;30',
+		'light_red' => '1;31',
+		'light_green' => '1;32',
+		'yellow' => '1;33',
+		'light_blue' => '1;34',
+		'light_purple' => '1;35',
+		'light_cyan' => '1;36',
+		'white' => '1;37',
 	);
+
+
+	public static function help( $error='' )
+	{
+		if( is_file('README.md') ) {
+			$help = file_get_contents( 'README.md' )."\n";
+			preg_match_all( '#```(.*)```#s', $help, $matches );
+			if( count($matches[1]) ) {
+				echo trim($matches[1][0])."\n\n";
+			}
+		} else {
+			echo "No help found!\n";
+		}
+
+		if( $error ) {
+			echo "Error: ".$error."!\n";
+		}
+
+		exit();
+	}
+
+
+	public static function isIp( $str ) {
+		return filter_var( $str, FILTER_VALIDATE_IP );
+	}
 
 
 	public static function isEmail( $str )
@@ -31,20 +63,7 @@ class Utils
 
 	public static function _print( $str, $color )
 	{
-		echo "\033[".self::T_SHELL_COLORS[$color]."m".$str." \033[0m";
-	}
-
-
-	public static function createTempFile()
-	{
-		$f = self::TMP_DIR . uniqid('dns') . '.xml';
-
-		if( ($fp=fopen($f,'w+')) ) {
-			fclose( $fp );
-			return $f;
-		}
-
-		return false;
+		echo "\033[".self::T_SHELL_COLORS[$color]."m".$str."\033[0m";
 	}
 
 
@@ -69,21 +88,6 @@ class Utils
 		}
 
 		return false;
-	}
-
-
-	public static function _strtotime( $str )
-	{
-		if( strstr($str,':') ) {
-			list($null, $str) = explode(':', $str);
-		}
-		if( strstr($str,'T') ) {
-			list($str,$null) = explode('T', $str);
-		}
-		$str = str_replace( '.', '-', $str );
-		$time = strtotime( trim($str) );
-
-		return $time;
 	}
 }
 
