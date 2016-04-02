@@ -203,7 +203,7 @@ class DnsExpire
 
 					if( $k !== false ) {
 						$this->t_expire[$h]['host'] = $host;
-						$date = $this->t_expire[$h]['date'] = trim( $whois[$k] );
+						$date = $this->t_expire[$h]['date'] = trim( preg_replace('#\s+#',' ',$whois[$k]) );
 						break;
 					}
 				}
