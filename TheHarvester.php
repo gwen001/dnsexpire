@@ -26,7 +26,7 @@ class TheHarvester
 
 	public function __construct()
 	{
-		exec( 'whereis theharvster', $exec );
+		exec( 'whereis theharvester', $exec );
 		$tmp = explode( ' ', $exec[0] );
 
 		if( count($tmp) <= 1 ) {
