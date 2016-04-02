@@ -8,12 +8,12 @@ Usage: php dnsexpire.php [OPTIONS] -d <domain>
 Options:
 	-a	set alert for result output, default=30 days
 	-d	set domain
-	-f	input file, result of TheHarvester
+	-f	input file
 	-h	print this help
 
 Examples:
 	php dnsexpire.php -d example.com
-	php dnsexpire.php -a 10 -f th.txt -d example.com
+	php dnsexpire.php -a 10 -f dns.txt -d example.com
 ```
 
 I don't believe in license.  
