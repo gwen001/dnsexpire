@@ -1,5 +1,5 @@
 # dnsexpire
-PHP tool to test alias domain expiration date of a given domain list  
+PHP tool to test CNAME expiration date of a given domain list  
 Note that this is an automated tool, manual check is still required.  
 
 ```
