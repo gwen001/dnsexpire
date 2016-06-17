@@ -27,7 +27,7 @@ set_time_limit( 0 );
 				$i++;
 				break;
 
-			case '-d':
+			case '-f':
 				$dnsexpire->setDomain( $_SERVER['argv'][$i + 1] );
 				$i++;
 				break;

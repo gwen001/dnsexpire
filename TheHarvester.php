@@ -9,12 +9,12 @@
 class TheHarvester
 {
 	const SE_ENGINE = 'all';
-	const SE_LIMIT = 500;
+	const SE_LIMIT = 100;
 
 	private $domain = null;
 	private $_domain = null;
 
-	private $tempfile = null;
+	//private $tempfile = null;
 
 	private $result = null;
 

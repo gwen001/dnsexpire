@@ -18,11 +18,9 @@ class DnsExpire
 
 	private $r_host = array();
 
-	private $r_email = array();
-
 	private $t_expire = array();
 
-	private $t_expire_string = array('Expiry date:', 'Expiration Date:', 'free-date:');
+	private $t_expire_string = array('Expiry date:', 'Expiration Date:', 'free-date:', 'expires:');
 
 
 	public function getDomain() {
@@ -43,11 +41,6 @@ class DnsExpire
 	}
 
 
-	public function rEmail() {
-		return $this->r_email;
-	}
-
-
 	public function rHost() {
 		return $this->r_host;
 	}
@@ -64,14 +57,6 @@ class DnsExpire
 	}
 
 
-	private function addEmail( $email )
-	{
-		if( !in_array($email,$this->r_email) ) {
-			$this->r_email[] = $email;
-		}
-	}
-
-
 	private function addHost( $o ) {
 		$this->r_host[ $o->getHost() ] = $o;
 	}
@@ -81,54 +66,28 @@ class DnsExpire
 	{
 		if( $this->input_file ) {
 			echo "Loading data file...\n";
-			$t_result = array( array(), file($this->input_file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) );
-			//var_dump($t_result);
-		} else {
-			$t_result = $this->findHost();
+			$t_result = file( $this->input_file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES );
 		}
+		//var_dump($t_result);
 
 		echo "\n";
-
-		foreach ($t_result[0] as $e) {
-			$this->addEmail( $e );
-		}
-		echo count($this->r_email)." email found.\n";
-
-		foreach ($t_result[1] as $h) {
+		
+		foreach ($t_result as $h) {
 			$this->computeHost( $h );
 		}
+		
 		$cnt_host = count( $this->r_host );
-		echo $cnt_host." host found.\n";
+		echo $cnt_host." host found.\n\n";
 
 		if( $cnt_host ) {
 			$this->getExpire();
 		}
-
-//		var_dump( $this->r_email);
-//		var_dump( $this->r_host);
-//		exit();
-
+		
 		echo "\n";
 
 		return $cnt_host;
 	}
-
-
-	private function findHost()
-	{
-		try {
-			$th = new TheHarvester();
-		} catch (Exception $e) {
-			echo $e->getMessage()."\n";
-			return array( array(), array($this->domain) );
-		}
-
-		$th->setDomain( $this->domain );
-		$th->run();
-
-		return array( $th->rEmail(), $th->rHost() );
-	}
-
+	
 
 	private function computeHost( $host, $son=null )
 	{
@@ -137,7 +96,7 @@ class DnsExpire
 		}
 
 		exec( 'host '.$host, $tmp );
-		usleep( 100000 );
+		usleep( 10000 );
 		$tmp = implode( "\n", $tmp );
 
 		preg_match( '#.* has address (.*)#i', $tmp, $matches );
@@ -152,8 +111,6 @@ class DnsExpire
 		$o->setIp( $matches[1] );
 
 		if( $son ) {
-			//$son->setParent( $o );
-			//$o->setParent( $son );
 			$o->addAlias( $son );
 		}
 
@@ -184,26 +141,29 @@ class DnsExpire
 			{
 				$h = implode('.', array_slice($tmp, $i));
 				//var_dump( $h );
-
-				if (isset($this->t_expire[$h])) {
+				
+				if( isset($this->t_expire[$h]) ) {
 					// we already performed whois for this host ??
-					if ($this->t_expire[$h]['date'] == '') {
-						continue;
-					} else {
-						$date = $this->t_expire[$h]['date'];
-						break;
-					}
+					$date = $this->t_expire[$h]['date'];
+					break;
 				} else {
-					$whois = '';
-					$this->t_expire[$h] = array( 'date'=>'', 'host'=>'' );
-					exec('whois ' . $h, $whois);
-					//echo "WHOIS $h\n";
-					usleep( 100000 );
-					$k = Utils::_array_search( $whois, $this->t_expire_string );
+					$test = '';
+					exec('host '.$h, $test);
+					
+					if( is_array($test) && count($test) )
+					{
+						$whois = '';
+						$this->t_expire[$h] = array( 'date'=>'', 'host'=>'' );
+						echo "WHOIS $h\n";
+						exec('whois ' . $h, $whois);
+						usleep( 10000 );
+						$k = Utils::_array_search( $whois, $this->t_expire_string );
+						
+						if( $k !== false ) {
+							$this->t_expire[$h]['host'] = $host;
+							$date = $this->t_expire[$h]['date'] = trim( preg_replace('#\s+#',' ',$whois[$k]) );
+						}
 
-					if( $k !== false ) {
-						$this->t_expire[$h]['host'] = $host;
-						$date = $this->t_expire[$h]['date'] = trim( preg_replace('#\s+#',' ',$whois[$k]) );
 						break;
 					}
 				}
@@ -228,15 +188,16 @@ class DnsExpire
 			}
 			else {
 				$current = time();
-
+				
 				if ($current > $time ) {
 					$color = 'red';
-					$info = implode( ', ', $d['host']->getAlias() );
+					$info = $this->getAliasPath( $d['host']->getHost() );
 				} elseif (($current + $this->alert) > $time) {
 					$color = 'yellow';
-					$info = implode( ', ', $d['host']->getAlias() );
+					$info = $this->getAliasPath( $d['host']->getHost() );
 				} else {
 					$color = 'green';
+					$info = $this->getAliasPath( $d['host']->getHost() );
 				}
 
 				Utils::_print( trim($d['date']), $color );
@@ -250,6 +211,18 @@ class DnsExpire
 	}
 
 
+	private function getAliasPath( $host, $path='' )
+	{
+		$path = $path.' '.$host;
+		
+		foreach( $this->r_host[$host]->getAlias() as $a ) {
+			$path = $this->getAliasPath( $a, $path );
+		}
+		
+		return trim($path);
+	}
+	
+	
 	private static function _strtotime( $str )
 	{
 		if( strstr($str,':') ) {
