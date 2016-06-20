@@ -71,7 +71,7 @@ class DnsExpire
 
 		echo "\n";
 		
-		echo "Data treatment...\n";
+		echo "Looking for aliases...\n";
 		foreach ($t_result as $h) {
 			$this->computeHost( $h );
 		}
@@ -181,7 +181,7 @@ class DnsExpire
 
 			if( !$d['date'] || $d['date'] == '' || !(int)$time ) {
 				$info = $d['date'];
-				Utils::_print( "*date not found", 'dark_grey' );
+				Utils::_print( "*date not found*", 'dark_grey' );
 			}
 			else {
 				$current = time();
