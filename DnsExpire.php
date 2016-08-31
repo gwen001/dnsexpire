@@ -182,23 +182,27 @@ class DnsExpire
 			$time = self::_strtotime( $d['date'] );
 
 			if( !$d['date'] || $d['date'] == '' || !(int)$time ) {
-				$info = $d['date'];
-				Utils::_print( "*date not found*", 'dark_grey' );
+                $color = 'dark_grey';
+                $txt = '*date not found*';
 			}
 			else {
+                $txt = trim( $d['date'] );
 				$current = time();
 				
 				if ($current > $time ) {
 					$color = 'red';
+                    $txt .= ' -> BAZINGA !!!';
 				} elseif (($current + $this->alert) > $time) {
 					$color = 'yellow';
+                    $txt .= ' -> ACHTUNG !';
 				} else {
 					$color = 'green';
+                    $txt .= ' -> OK';
 				}
-
-				Utils::_print( trim($d['date']), $color );
 			}
 			
+            Utils::_print( $txt, $color );
+            
 			$info = $this->getAliasPath( $d['host']->getHost() );
 			if( count($info) ) {
 				echo "\n";
