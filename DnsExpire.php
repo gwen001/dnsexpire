@@ -67,7 +67,9 @@ class DnsExpire
 		if( $this->input_file ) {
 			echo "Loading data file...\n";
 			$t_result = file( $this->input_file, FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES );
-		}
+		} else {
+            $t_result = [ $this->domain ];
+        }
 
 		echo "\n";
 		
