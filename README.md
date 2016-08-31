@@ -3,7 +3,7 @@ PHP tool to test CNAME expiration date of a subdomain list
 Note that this is an automated tool, manual check is still required.  
 
 ```
-Usage: php dnsexpire.php [OPTIONS] -d <domain|input file>
+Usage: php dnsexpire.php [OPTIONS] -f <domain|input file>
 
 Options:
 	-a	set alert for result output, default=30 days
@@ -11,8 +11,8 @@ Options:
 	-h	print this help
 
 Examples:
-	php dnsexpire.php -d example.com
-	php dnsexpire.php -a 10 -d dns.txt
+	php dnsexpire.php -f example.com
+	php dnsexpire.php -a 10 -f dns.txt
 ```
 
 I don't believe in license.  
