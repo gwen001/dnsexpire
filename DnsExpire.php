@@ -20,7 +20,7 @@ class DnsExpire
 
 	private $t_expire = array();
 
-	private $t_expire_string = array('Expiry date:', 'Expiration Date:', 'free-date:', 'expires:');
+	private $t_expire_string = array('Expiry date:', 'Expiration Date:', 'free-date:', 'expires:', 'Expiry :');
 
 
 	public function getDomain() {
