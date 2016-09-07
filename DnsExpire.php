@@ -135,43 +135,43 @@ class DnsExpire
 	{
 		foreach( $this->r_host as $host )
 		{
-			$date = null;
-			$tmp = explode( '.', $host->getHost() );
+			$domain = $this->extractDomain( $host->getHost() );
 
-			for( $i=count($tmp)-2 ; $i>=0 ; $i-- )
-			{
-				$h = implode('.', array_slice($tmp, $i));
+			if( !isset($this->t_expire[$domain]) ) {
+				$whois = '';
+				$this->t_expire[$domain] = array('date' => '', 'host' => $host);
+				echo 'WHOIS ' . $domain . "\n";
+				exec('whois ' . $domain, $whois);
+				usleep(10000);
+				$k = Utils::_array_search($whois, $this->t_expire_string);
 				
-				if( isset($this->t_expire[$h]) ) {
-					// we already performed whois for this host ??
-					$date = $this->t_expire[$h]['date'];
-					break;
-				} else {
-					$test = '';
-					exec('host '.$h, $test);
-					
-					if( is_array($test) && count($test) )
-					{
-						$whois = '';
-						$this->t_expire[$h] = array( 'date'=>'', 'host'=>$host );
-						echo "WHOIS $h\n";
-						exec('whois ' . $h, $whois);
-						usleep( 10000 );
-						$k = Utils::_array_search( $whois, $this->t_expire_string );
-						
-						if( $k !== false ) {
-							$date = $this->t_expire[$h]['date'] = trim( preg_replace('#\s+#',' ',$whois[$k]) );
-						}
-
-						break;
-					}
+				if ($k !== false) {
+					$this->t_expire[$domain]['date'] = trim(preg_replace('#\s+#', ' ', $whois[$k]));
 				}
 			}
 		}
 
 		ksort( $this->t_expire );
 	}
-
+	
+	
+	private static function extractDomain( $host )
+	{
+		$tmp = explode( '.', $host );
+		$cnt = count( $tmp );
+		
+		$domain = $tmp[$cnt-1];
+		
+		for( $i=$cnt-2 ; $i>=0 ; $i-- ) {
+			$domain = $tmp[$i].'.'.$domain;
+			if( strlen($tmp[$i]) > 3 ) {
+				break;
+			}
+		}
+		
+		return $domain;
+	}
+	
 
 	public function printResult()
 	{
