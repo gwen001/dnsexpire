@@ -141,12 +141,17 @@ class DnsExpire
 				$whois = '';
 				$this->t_expire[$domain] = array('date' => '', 'host' => $host);
 				echo 'WHOIS ' . $domain . "\n";
-				exec('whois ' . $domain, $whois);
-				usleep(10000);
-				$k = Utils::_array_search($whois, $this->t_expire_string);
+				exec( 'whois ' . $domain, $whois );
+				$str_whois = implode( "\n", $whois );
+				usleep( 10000 );
 				
-				if ($k !== false) {
-					$this->t_expire[$domain]['date'] = trim(preg_replace('#\s+#', ' ', $whois[$k]));
+				if( preg_match('#No match for "(.*)"\.#',$str_whois) ) {
+					$this->t_expire[$domain]['date'] = 'closed';
+				} else {
+					$k = Utils::_array_search( $whois, $this->t_expire_string );
+					if( $k !== false ) {
+						$this->t_expire[$domain]['date'] = trim( preg_replace('#\s+#', ' ', $whois[$k]) );
+					}
 				}
 			}
 		}
@@ -181,7 +186,7 @@ class DnsExpire
 			$info = '';
 			$time = self::_strtotime( $d['date'] );
 
-			if( !$d['date'] || $d['date'] == '' || !(int)$time ) {
+			if( (!$d['date'] || $d['date'] == '' || !(int)$time) && $d['date']!='closed' ) {
                 $color = 'dark_grey';
                 $txt = '*date not found*';
 			}
@@ -189,7 +194,7 @@ class DnsExpire
                 $txt = trim( $d['date'] );
 				$current = time();
 				
-				if ($current > $time ) {
+				if ($current > $time || $d['date']=='closed' ) {
 					$color = 'red';
                     $txt .= ' -> BAZINGA !!!';
 				} elseif (($current + $this->alert) > $time) {
