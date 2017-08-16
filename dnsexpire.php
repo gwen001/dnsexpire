@@ -8,7 +8,6 @@
  */
 
 function __autoload( $c ) {
-	echo dirname(__FILE__).'/'.$c.'.php';
 	include( dirname(__FILE__).'/'.$c.'.php' );
 }
 
@@ -21,7 +20,6 @@ set_time_limit( 0 );
 	$dnsexpire = new DnsExpire();
 
 	$argc = $_SERVER['argc'] - 1;
-	var_dump($_SERVER['argv']);
 
 	for ($i = 1; $i <= $argc; $i++) {
 		switch ($_SERVER['argv'][$i]) {
