@@ -8,7 +8,8 @@
  */
 
 function __autoload( $c ) {
-	include( $c.'.php' );
+	echo dirname(__FILE__).'/'.$c.'.php';
+	include( dirname(__FILE__).'/'.$c.'.php' );
 }
 
 
