@@ -99,7 +99,7 @@ class DnsExpire
 		}
 
 		exec( 'host '.$host, $tmp );
-		usleep( 1000000 );
+		usleep( 500000 );
 		$tmp = implode( "\n", $tmp );
 
 		preg_match( '#.* has address (.*)#i', $tmp, $matches );
@@ -143,7 +143,7 @@ class DnsExpire
 				echo 'WHOIS ' . $domain . "\n";
 				exec( 'whois ' . $domain, $whois );
 				$str_whois = implode( "\n", $whois );
-				usleep( 1000000 );
+				usleep( 500000 );
 				
 				if( preg_match('#No match for "'.strtoupper($domain).'"\.#',$str_whois) ) {
 					$this->t_expire[$domain]['date'] = 'closed';
