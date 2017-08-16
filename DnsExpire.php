@@ -163,6 +163,8 @@ class DnsExpire
 
 	public function printResult()
 	{
+		$current = time();
+		
 		foreach( $this->t_expire as $h=>$d )
 		{
 			echo 'Domain: '.$h.' ';
@@ -175,12 +177,12 @@ class DnsExpire
 			}
 			else {
                 $txt = trim( $d['date'] );
-				$current = time();
+                $txt .= ' ('.date('d/m/Y',$time).')';
 				
 				if ($current > $time || $d['date']=='closed' ) {
 					$color = 'red';
                     $txt .= ' -> BAZINGA !!!';
-				} elseif (($current + $this->alert) > $time) {
+				} elseif( ($current+$this->alert) > $time ) {
 					$color = 'yellow';
                     $txt .= ' -> ACHTUNG !';
 				} else {
