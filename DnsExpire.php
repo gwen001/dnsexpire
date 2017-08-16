@@ -74,7 +74,7 @@ class DnsExpire
 		echo "\n";
 		
 		echo "Looking for aliases...\n";
-		foreach ($t_result as $h) {
+		foreach( $t_result as $h ) {
 			$this->computeHost( $h );
 		}
 		
@@ -102,15 +102,16 @@ class DnsExpire
 		usleep( 500000 );
 		$tmp = implode( "\n", $tmp );
 
-		preg_match( '#.* has address (.*)#i', $tmp, $matches );
-
-		if( !count($matches) ) {
+		$m = preg_match( '#not found: 3(NXDOMAIN)#', $tmp );
+		if( $m ) {
 			return false;
 		}
 
+		//preg_match( '#.* has address (.*)#i', $tmp, $matches );
+
 		$o = new Host();
 		$o->setHost( $host );
-		$o->setIp( $matches[1] );
+		//$o->setIp( $matches[1] );
 
 		if( $son ) {
 			$o->addAlias( $son );
