@@ -143,7 +143,7 @@ class DnsExpire
 				echo 'WHOIS ' . $domain . "\n";
 				exec( 'whois ' . $domain, $whois );
 				$str_whois = implode( "\n", $whois );
-				usleep( 10000 );
+				usleep( 1000000 );
 				
 				if( preg_match('#No match for "(.*)"\.#',$str_whois) ) {
 					$this->t_expire[$domain]['date'] = 'closed';
