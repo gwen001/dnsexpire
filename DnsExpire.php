@@ -99,7 +99,7 @@ class DnsExpire
 		}
 
 		exec( 'host '.$host, $tmp );
-		usleep( 10000 );
+		usleep( 1000000 );
 		$tmp = implode( "\n", $tmp );
 
 		preg_match( '#.* has address (.*)#i', $tmp, $matches );
