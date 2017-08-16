@@ -217,6 +217,8 @@ class DnsExpire
 			}
 			echo "\n";
 		}
+		
+		echo "Done.\n\n";
 	}
 
 
