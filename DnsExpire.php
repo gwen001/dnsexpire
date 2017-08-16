@@ -136,7 +136,7 @@ class DnsExpire
 	{
 		foreach( $this->r_host as $host )
 		{
-			$domain = $this->extractDomain( $host->getHost() );
+			$domain = Utils::extractDomain( $host->getHost() );
 
 			if( !isset($this->t_expire[$domain]) ) {
 				$whois = '';
@@ -158,24 +158,6 @@ class DnsExpire
 		}
 
 		ksort( $this->t_expire );
-	}
-	
-	
-	private static function extractDomain( $host )
-	{
-		$tmp = explode( '.', $host );
-		$cnt = count( $tmp );
-		
-		$domain = $tmp[$cnt-1];
-		
-		for( $i=$cnt-2 ; $i>=0 ; $i-- ) {
-			$domain = $tmp[$i].'.'.$domain;
-			if( strlen($tmp[$i]) > 3 ) {
-				break;
-			}
-		}
-		
-		return $domain;
 	}
 	
 
