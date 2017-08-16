@@ -145,7 +145,7 @@ class DnsExpire
 				$str_whois = implode( "\n", $whois );
 				usleep( 1000000 );
 				
-				if( preg_match('#No match for "(.*)"\.#',$str_whois) ) {
+				if( preg_match('#No match for "'.strtoupper($domain).'"\.#',$str_whois) ) {
 					$this->t_expire[$domain]['date'] = 'closed';
 				} else {
 					$k = Utils::_array_search( $whois, $this->t_expire_string );
