@@ -97,7 +97,7 @@ class DnsExpire
 			return $this->r_host[$host];
 		}
 
-		exec( 'host '.$host, $tmp );
+		exec( 'host -t CNAME '.$host, $tmp );
 		usleep( 300000 );
         // var_dump($tmp);
 		$tmp = implode( "\n", $tmp );
