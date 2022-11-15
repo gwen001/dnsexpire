@@ -7,9 +7,10 @@
  * - gwen -
  */
 
-function __autoload( $c ) {
-	include( dirname(__FILE__).'/'.$c.'.php' );
-}
+
+spl_autoload_register(function ( $c ) {
+	include( dirname(__FILE__).'/class.'.strtolower($c).'.php' );
+});
 
 
 set_time_limit( 0 );
@@ -61,5 +62,3 @@ set_time_limit( 0 );
 
 
 exit();
-
-?>
