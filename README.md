@@ -5,7 +5,8 @@
 </p>
 
 # dnsexpire
-PHP tool to test CNAME expiration date of a subdomain list  
+
+PHP tool to test CNAME expiration date of a subdomain list.  
 Note that this is an automated tool, manual check is still required.  
 
 ## Install
