@@ -31,3 +31,8 @@ Examples:
 ```
 
 <img src="https://raw.githubusercontent.com/gwen001/dnsexpire/master/preview.png" />
+
+---
+
+Feel free to [open an issue](/../../issues/) if you have any problem with the script.  
+
