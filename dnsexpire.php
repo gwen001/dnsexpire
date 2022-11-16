@@ -1,15 +1,8 @@
 #!/usr/bin/php
 <?php
 
-/**
- * I don't believe in license
- * You can do want you want with this program
- * - gwen -
- */
-
-
 spl_autoload_register(function ( $c ) {
-	include( dirname(__FILE__).'/class.'.strtolower($c).'.php' );
+	include( dirname(__FILE__).'/class.'.$c.'.php' );
 });
 
 
