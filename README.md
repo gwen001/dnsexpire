@@ -3,6 +3,7 @@
 <h4 align="center">PHP tool to test CNAME expiration date of a subdomain list.</h4>
 
 <p align="center">
+    <img src="https://img.shields.io/badge/python-v3-blue" alt="python badge">
     <img src="https://img.shields.io/badge/php-%3E=5.5-blue" alt="php badge">
     <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license badge">
     <a href="https://twitter.com/intent/tweet?text=https%3a%2f%2fgithub.com%2fgwen001%2fdnsexpire%2f" target="_blank"><img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fgwen001%2Fdnsexpire" alt="twitter badge"></a>
@@ -35,6 +36,28 @@ Options:
 Examples:
 	php dnsexpire.php -f example.com
 	php dnsexpire.php -a 10 -f dns.txt
+```
+
+## Note
+
+`dnsexpire.py` is the Python version of the script.
+It's much faster but not sure how reliable it is.
+
+```
+$ python3 dnsexpire.py -o <hosts.txt>
+```
+
+```
+usage: dnsexpire.py [-h] [-a] [-o HOST] [-t THREADS] [-v VERBOSE]
+
+options:
+  -h, --help            show this help message and exit
+  -a, --all             also test dead hosts and non alias
+  -o HOST, --host HOST  set host, can be a file or single host
+  -t THREADS, --threads THREADS
+                        threads, default 10
+  -v VERBOSE, --verbose VERBOSE
+                        display output, can be: 0=everything, 1=only alias, 2=only possible vulnerable, default 1
 ```
 
 ---
